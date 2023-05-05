@@ -13,20 +13,19 @@ export const viewUsers = async (req, res) => {
   });
   if (userCheck) {
 
-  // const people = [];
-  // for (let i = 0; i < userCheck.contacts.length; i++) {
-  //   const person = await userModel.findOne({ _id: userCheck.contacts[i] });
-  //   people.push(person);
-  // }
+  const people = [];
+  for (let i = 0; i < userCheck.contacts.length; i++) {
+    const person = await userModel.findOne({ _id: userCheck.contacts[i] });
+    people.push(person);
+  }
 
-  // const excludedIds = people.map((person) => person._id);
-  // excludedIds.push(userCheck._id);
+  const excludedIds = people.map((person) => person._id);
+  excludedIds.push(userCheck._id);
 
   const response = {
     data: await userModel.aggregate([
       { $sample: { size: 10 } }, // get 10 random data
-      { $match: { _id: { $ne: userCheck._id } } },  // exclude logged in user and connected persons from the random dataset
-      // { $match: { _id: { $nin: excludedIds } } },  // exclude logged in user and connected persons from the random dataset
+      { $match: { _id: { $nin: excludedIds } } },  // exclude logged in user and connected persons from the random dataset
       { $group: { _id: "$_id", data: { $addToSet: "$$ROOT" } } }, // add the data to set, so that duplicate values are ignored
       { $unwind: "$data" }, // remove the array and give output as object
       { $replaceRoot: { newRoot: "$data" } }, // change the set from root set to something else for sending
