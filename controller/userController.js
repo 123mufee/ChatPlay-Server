@@ -19,11 +19,11 @@ export const getDetails = async (req, res) => {
 
 export const otherProfile = async (req, res) => {
   const response = {}
-  console.log(req.params.id);
+  // console.log(req.params.id);
   const other = await userModel.findOne({
     _id: req.params.id
   })
-  console.log(other);
+  // console.log(other);
   response.data = other
   const contacts = []
   for (let i = 0; i < other.contacts.length; i++) {
@@ -116,7 +116,7 @@ export const checkRequests = async (req, res) => {
     };
     res.status(200).json(response);
   } catch (error) {
-    console.log('no token');
+    // console.log('no token');
   }
 
 };
@@ -223,65 +223,89 @@ export const removeConnection = async (req, res) => {
   res.status(200).json(response);
 };
 // export const memoryMatchWon = async (req, res) => {
-//   // console.log(req.body.token);
+//   // // console.log(req.body.token);
 //   try {
 //     const id = jwt.verify(req.body.token, process.env.TOKEN_SECRET).userId
 //     const user = await userModel.findOne({ _id: id })
-//     // console.log(user);
+//     // // console.log(user);
 //     // await userModel.findByIdAndUpdate({ _id: id }, { $inc: { 'gameHistory.memoryMatch.won': 1 } })
 //     res.status(200).json(user)
 //   } catch (error) {
-//     console.log(error);
+//     // console.log(error);
 //   }
 // }
 
 // export const memoryMatchLoss = async (req, res) => {
-//   // console.log(req.body.token);
+//   // // console.log(req.body.token);
 //   try {
 //     const id = jwt.verify(req.body.token, process.env.TOKEN_SECRET).userId
 //     const user = await userModel.findOne({ _id: id })
-//     // console.log(user);
+//     // // console.log(user);
 //     // await userModel.findByIdAndUpdate({ _id: id }, { $inc: { 'gameHistory.memoryMatch.loss': 1 } })
 //     res.status(200).json(user)
 //   } catch (error) {
-//     console.log(error);
+//     // console.log(error);
 //   }
 // }
 
 export const memoryMatchDetails = async (req, res) => {
-  // console.log(req.body.token);
+  // // console.log(req.body.token);
   try {
     const id = jwt.verify(req.body.token, process.env.TOKEN_SECRET).userId
     const user = await userModel.findOne({ _id: id })
-    // console.log(user);
+    // // console.log(user);
     // await userModel.findByIdAndUpdate({ _id: id }, { $inc: { 'gameHistory.memoryMatch.won': 1 } })
     res.status(200).json(user)
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
 export const memoryMatchWon = async (req, res) => {
-  // console.log(req.body.token);
+  // // console.log(req.body.token);
   try {
     const id = jwt.verify(req.params.token, process.env.TOKEN_SECRET).userId
     const user = await userModel.findOne({ _id: id })
     await userModel.updateOne({ _id: id }, { $inc: { 'gameHistory.memoryMatch.won': 1 } })
-    // console.log(user);
+    // // console.log(user);
     res.status(200)
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 export const memoryMatchLoss = async (req, res) => {
-  // console.log(req.body.token);
+  // // console.log(req.body.token);
   try {
     const id = jwt.verify(req.params.token, process.env.TOKEN_SECRET).userId
     const user = await userModel.findOne({ _id: id })
     await userModel.updateOne({ _id: id }, { $inc: { 'gameHistory.memoryMatch.lost': 1 } })
-    // console.log(user);
+    // // console.log(user);
     res.status(200)
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+  }
+}
+export const tictactoeWon = async (req, res) => {
+  console.log('won tic tac');
+  try {
+    const id = jwt.verify(req.params.token, process.env.TOKEN_SECRET).userId
+    const user = await userModel.findOne({ _id: id })
+    await userModel.updateOne({ _id: id }, { $inc: { 'gameHistory.ticTacToe.won': 1 } })
+    // // console.log(user);
+    res.status(200)
+  } catch (error) {
+    // console.log(error);
+  }
+}
+export const tictactoeloss = async (req, res) => {
+  console.log('lost tic tac');
+  try {
+    const id = jwt.verify(req.params.token, process.env.TOKEN_SECRET).userId
+    const user = await userModel.findOne({ _id: id })
+    await userModel.updateOne({ _id: id }, { $inc: { 'gameHistory.ticTacToe.lost': 1 } })
+    // // console.log(user);
+    res.status(200)
+  } catch (error) {
+    // console.log(error);
   }
 }

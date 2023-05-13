@@ -25,7 +25,7 @@ const sendMail = (email, otp) => {
                 console.error(error);
                 response.otpSent = false
             }
-            console.log("msg sent");
+            // console.log("msg sent");
         })
         resolve(response)
     })

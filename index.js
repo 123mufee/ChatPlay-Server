@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(cookieParser());
 app.use(fileUpload());
 
@@ -105,37 +105,70 @@ io.on("connection", (socket) => {
   });
 
   // Tic Tac Toe
+  // socket.on("joinRoom", (roomCode) => {
+  //   // console.log(`A user joined the room ${roomCode}`);
+  //   // console.log(roomCode);
+  //   socket.join(roomCode);
+  // });
+  // socket.on("joinRoom", (roomCode) => {
+  //   // console.log(`A user joined the room ${roomCode}`);
+  //   // console.log(roomCode);
+  //   socket.join(roomCode);
+
+  //   const room = io.sockets.adapter.rooms.get(roomCode);
+  //   const isRoomFull = room && room.size === 2;
+  //   console.log(isRoomFull);
+
+  //   // Emit the boolean value to the client
+  //   if (isRoomFull) {
+  //     socket.emit("roomStatus", isRoomFull);
+  //   }
+  // });
+
   socket.on("joinRoom", (roomCode) => {
-    console.log(`A user joined the room ${roomCode}`);
     socket.join(roomCode);
+  
+    const room = io.sockets.adapter.rooms.get(roomCode);
+  
+    if (room && room.size === 2) {
+      // Emit the room status to both clients in the room
+      io.to(roomCode).emit("roomStatus", true);
+      console.log('emitted to both players');
+    } else {
+      // Emit the room status to the current client only
+      socket.emit("roomStatus", false);
+      console.log('emitted to one person');
+    }
   });
+  
+
 
   socket.on("play", ({ id, roomCode }) => {
-    console.log(`play at ${id} to ${roomCode}`);
+    // // console.log(`play at ${id} to ${roomCode}`);
     socket.broadcast.to(roomCode).emit("updateGame", id);
   });
 
   socket.on("disconnect", () => {
-    console.log("User Disconnected");
+    // // console.log("User Disconnected");
   });
 
-  let waitingRoom = null;
-  socket.on('joinWaitingRoom', () => {
-    console.log(waitingRoom);
-    if (waitingRoom === null) {
-      // Create a new waiting room
-      waitingRoom = uuidv4();
-      socket.join(waitingRoom);
-      console.log(`user ${socket.id} joined waiting room ${waitingRoom}`);
-    } else {
-      // Join the existing waiting room
-      socket.join(waitingRoom);
-      console.log(`user ${socket.id} joined waiting room ${waitingRoom}`);
+  // let waitingRoom = null;
+  // socket.on('joinWaitingRoom', () => {
+  //   console.log(waitingRoom);
+  //   if (waitingRoom === null) {
+  //     // Create a new waiting room
+  //     waitingRoom = uuidv4();
+  //     socket.join(waitingRoom);
+  //     // // console.log(`user ${socket.id} joined waiting room ${waitingRoom}`);
+  //   } else {
+  //     // Join the existing waiting room
+  //     socket.join(waitingRoom);
+  //     // // console.log(`user ${socket.id} joined waiting room ${waitingRoom}`);
 
-      // Notify the first user that the second user joined
-      io.to(waitingRoom).emit('startGame');
-      waitingRoom = null; // Reset waiting room
-    }
-  });
+  //     // Notify the first user that the second user joined
+  //     io.to(waitingRoom).emit('startGame');
+  //     waitingRoom = null; // Reset waiting room
+  //   }
+  // });
 
 });

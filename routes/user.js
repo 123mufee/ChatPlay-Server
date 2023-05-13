@@ -26,6 +26,8 @@ import {
   otherProfile,
   memoryMatchWon,
   memoryMatchLoss,
+  tictactoeWon,
+  tictactoeloss,
 } from "../controller/userController.js";
 
 // Login Routes
@@ -60,5 +62,7 @@ router.delete('/removeConnection/:id/:token', removeConnection)
 // router.post("/memorywon", memoryMatchWon)
 router.get('/memoryWon/:win/:token', memoryMatchWon)
 router.get('/memoryLoss/:loss/:token', memoryMatchLoss)
+router.get('/ticWon/:token',tictactoeWon)
+router.get('/ticLoss/:token', tictactoeloss)
 
 export default router;

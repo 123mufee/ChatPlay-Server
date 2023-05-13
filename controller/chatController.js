@@ -19,12 +19,12 @@ export const getAllUsers = async (req, res, next) => {
     const user = await userModel
       .findOne({ _id: req.params.id });
       const contacts = user.contacts
-      console.log(contacts);
+      // console.log(contacts);
       const people = []
       for(let i=0;i<contacts.length;i++) {
         people[i] = await userModel.findOne({_id: contacts[i]})
       }
-      // console.log(people);
+      // // console.log(people);
 
 
     return res.json(people);
@@ -71,7 +71,7 @@ export const addMessage = async (req, res, next) => {
 
 
 export const getId = async(req, res) => {
-  console.log(req.params.id);
+  // console.log(req.params.id);
   const connectedUser=await userModel.findOne({_id:req.params.id});
   res.status(200).json(connectedUser)
 

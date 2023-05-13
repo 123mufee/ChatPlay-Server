@@ -43,12 +43,12 @@ export const connectedUsers = async (req, res) => {
     // const user = await userModel
     // .findOne({ _id: req.params.id });
     const contacts = user.contacts
-    // console.log(contacts);
+    // // console.log(contacts);
     const people = []
     for (let i = 0; i < contacts.length; i++) {
       people[i] = await userModel.findOne({ _id: contacts[i] })
     }
-    console.log(people);
+    // console.log(people);
 
 
     return res.status(200).json(people);
